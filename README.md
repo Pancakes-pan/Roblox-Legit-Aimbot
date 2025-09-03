@@ -14,4 +14,4 @@ Keybind (L by default) to toggle the aimbot on/off
 # Execution
 Well obviously you will need an *executor* (i listed some popular ones for each platform below) for executing the script
 
-<pre> ```lua loadstring(game:HttpGet("https://raw.githubusercontent.com/Pancakes-pan/Roblox-Soft-Aimlock/refs/heads/main/main.lua"))() ``` </pre>
+<pre> loadstring(game:HttpGet("https://raw.githubusercontent.com/Pancakes-pan/Roblox-Soft-Aimlock/refs/heads/main/main.lua"))() </pre>
