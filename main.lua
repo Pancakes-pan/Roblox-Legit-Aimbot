@@ -5,7 +5,6 @@ local camera = workspace.CurrentCamera
 local localPlayer = Players.LocalPlayer
 
 local AimbotEnabled = true
-local ESPEnabled = true
 local WallCheck = true
 local TeamCheck = true
 local FieldOfView = 90 
@@ -22,29 +21,6 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
         print("Aimbot Toggled:", AimbotEnabled)
     end
 end)
-
-local function drawESP(target)
-    if not ESPEnabled then return end
-    if not target:FindFirstChild("Head") then return end
-    local head = target.Head
-    local vector, onScreen = camera:WorldToViewportPoint(head.Position)
-    if onScreen then
-        local line = Drawing.new("Line")
-        line.From = Vector2.new(camera.ViewportSize.X/2, camera.ViewportSize.Y)
-        line.To = Vector2.new(vector.X, vector.Y)
-
-        local player = Players:GetPlayerFromCharacter(target)
-        if player and player.Team == localPlayer.Team then
-            line.Color = Color3.fromRGB(0, 255, 0)
-        else
-            line.Color = Color3.fromRGB(255, 0, 0)
-        end
-
-        line.Thickness = 1.5
-        line.Transparency = 1
-        task.delay(0.03, function() line:Remove() end)
-    end
-end
 
 local function hasLineOfSight(target)
     if not WallCheck then return true end
@@ -102,19 +78,16 @@ end
 
 RunService.RenderStepped:Connect(function()
     local target = getBestTarget()
-    if target then
-        drawESP(target)
-        if AimbotEnabled then
-            local currentCFrame = camera.CFrame
-            local targetCFrame = CFrame.new(camera.CFrame.Position, target.Head.Position)
-            
-            local jitter = Vector3.new(
-                (math.random() - 0.5) * AimJitterAmount,
-                (math.random() - 0.5) * AimJitterAmount,
-                0
-            )
-            
-            camera.CFrame = currentCFrame:Lerp(targetCFrame * CFrame.new(jitter), AimSmoothness)
-        end
+    if target and AimbotEnabled then
+        local currentCFrame = camera.CFrame
+        local targetCFrame = CFrame.new(camera.CFrame.Position, target.Head.Position)
+        
+        local jitter = Vector3.new(
+            (math.random() - 0.5) * AimJitterAmount,
+            (math.random() - 0.5) * AimJitterAmount,
+            0
+        )
+        
+        camera.CFrame = currentCFrame:Lerp(targetCFrame * CFrame.new(jitter), AimSmoothness)
     end
 end)
